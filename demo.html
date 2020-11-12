@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</head>
+<body>
+  
+  <!-- Slider main container -->
+  <div class="swiper-container">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      <!-- <div class="swiper-slide">
+      </div> -->
+    </div>
+    <!-- If we need pagination -->
+    <!-- <div class="swiper-pagination"></div> -->
+      <!-- If we need navigation buttons -->
+    <!-- <div class="swiper-button-prev"></div> -->
+    <!-- <div class="swiper-button-next"></div> -->
+      <!-- If we need scrollbar -->
+    <!-- <div class="swiper-scrollbar"></div> -->
+  </div>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Json Call
+    fetch('book.json')
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        const book = JSON.stringify(data);
+        const bookObj = JSON.parse(book);
+        const body = bookObj[0].body;
+        var arrStr = [];
+        let setLength = 800;
+
+        const parent = document.querySelector('.swiper-wrapper');
+        
+        for (let i = 0, charsLength = body.length; i <= charsLength; i += setLength) {
+          var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+          var slideItem = "<div class='swiper-slide' style='background: #" + randomColor + "'><div style='padding: 20px'>" + body.substring(i, i + setLength) + "</div></div>";
+          arrStr.push(slideItem);
+          // console.log(slideItem);
+        }
+
+        var mySwiper = new Swiper('.swiper-container', {
+          // Optional parameters
+          direction: 'horizontal',
+          // direction: 'vertical',
+          lazy: true,
+          loopedSlides: arrStr.length,
+          // If we need pagination
+          // pagination: {
+          //   el: '.swiper-pagination',
+          // },
+          // Navigation arrows
+          // navigation: {
+          //   nextEl: '.swiper-button-next',
+          //   prevEl: '.swiper-button-prev',
+          // },
+          // And if we need scrollbar
+          scrollbar: {
+            el: '.swiper-scrollbar',
+          }
+        });
+        mySwiper.appendSlide(arrStr);
+      })
+  })
+
+  
+
+
+</script>
+</body>
+</html>
