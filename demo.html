@@ -6,10 +6,13 @@
   <title>Document</title>
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
   <link rel="stylesheet" href="demo.css">
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.6/js/swiper.js"></script>
 </head>
 <body>
   
+  <div class="control">
+    <button type="button" id="viewMode">가로세로 전환</button>
+  </div>
   <!-- Slider main container -->
   <div class="swiper-container">
     <!-- Additional required wrapper -->
@@ -19,19 +22,19 @@
       </div> -->
     </div>
     <!-- If we need pagination -->
-    <!-- <div class="swiper-pagination"></div> -->
-      <!-- If we need navigation buttons -->
-    <!-- <div class="swiper-button-prev"></div> -->
-    <!-- <div class="swiper-button-next"></div> -->
+    <div class="swiper-pagination"></div>
       <!-- If we need scrollbar -->
     <!-- <div class="swiper-scrollbar"></div> -->
   </div>
 
 <script>
 
+  let arrStr = [];
+  const setLength = 800; // 분리할 문자열 길이
+
   document.addEventListener("DOMContentLoaded", function () {
     // Json Call
-    fetch('book.json')
+    return fetch('book.json')
       .then(function (response) {
         return response.json();
       })
@@ -39,44 +42,53 @@
         const book = JSON.stringify(data);
         const bookObj = JSON.parse(book);
         const body = bookObj[0].body;
-        var arrStr = [];
-        let setLength = 800;
-
-        const parent = document.querySelector('.swiper-wrapper');
         
         for (let i = 0, charsLength = body.length; i <= charsLength; i += setLength) {
           var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-          var slideItem = "<div class='swiper-slide' style='background: #" + randomColor + "'><div style='padding: 20px'>" + body.substring(i, i + setLength) + "</div></div>";
+          var slideItem = "<div class='swiper-slide' style='background: #" + randomColor + "'><div style='padding: 40px'><h2>" + i + "</h2>" + body.substring(i, i + setLength) + "</div></div>";
           arrStr.push(slideItem);
-          // console.log(slideItem);
         }
 
-        var mySwiper = new Swiper('.swiper-container', {
-          // Optional parameters
-          direction: 'horizontal',
-          // direction: 'vertical',
-          lazy: true,
-          loopedSlides: arrStr.length,
-          // If we need pagination
-          // pagination: {
-          //   el: '.swiper-pagination',
-          // },
-          // Navigation arrows
-          // navigation: {
-          //   nextEl: '.swiper-button-next',
-          //   prevEl: '.swiper-button-prev',
-          // },
-          // And if we need scrollbar
-          scrollbar: {
-            el: '.swiper-scrollbar',
-          }
-        });
-        mySwiper.appendSlide(arrStr);
-      })
+        loadSlide(arrStr);
+
+        // let isVertical = false,
+        // direction = 'horizontal';
+        // let mySwiper = initSwiper(direction);  // dom 로드시 초기화
+        // mySwiper.appendSlide(arrStr); // slide items add
+      });
+      return arrStr;
   })
 
-  
+  // view mode change function 
+  viewChange = document.getElementById('viewMode');
+  viewChange.addEventListener('click', changeDirection, false);
 
+  var isVertical = false,
+  direction = 'horizontal';
+  mySwiper = initSwiper(direction);
+
+  function loadSlide() {
+    console.log(isVertical, direction)
+    mySwiper.appendSlide(arrStr); // slide items add
+  }
+ 
+  function initSwiper(direction) {
+    return new Swiper('.swiper-container', {
+      lazy: true,
+      speed: 600,
+      direction: direction
+    });
+  }
+
+  function changeDirection() {
+    isVertical = !isVertical;
+    direction = isVertical ? 'vertical' : 'horizontal';
+    let slideIndex = mySwiper.activeIndex;
+    mySwiper.destroy(true, true);
+    mySwiper = initSwiper(direction);
+    mySwiper.appendSlide(arrStr);
+    mySwiper.slideTo(slideIndex,0);
+  }
 
 </script>
 </body>
