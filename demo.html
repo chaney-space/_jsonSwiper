@@ -44,17 +44,12 @@
         const body = bookObj[0].body;
         
         for (let i = 0, charsLength = body.length; i <= charsLength; i += setLength) {
-          var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-          var slideItem = "<div class='swiper-slide' style='background: #" + randomColor + "'><div style='padding: 40px'><h2>" + i + "</h2>" + body.substring(i, i + setLength) + "</div></div>";
+          let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+          let slideItem = "<div class='swiper-slide' style='background: #" + randomColor + "'><div style='padding: 40px'><h2>" + i + "</h2>" + body.substring(i, i + setLength) + "</div></div>";
           arrStr.push(slideItem);
         }
 
         loadSlide(arrStr);
-
-        // let isVertical = false,
-        // direction = 'horizontal';
-        // let mySwiper = initSwiper(direction);  // dom 로드시 초기화
-        // mySwiper.appendSlide(arrStr); // slide items add
       });
       return arrStr;
   })
@@ -63,20 +58,21 @@
   viewChange = document.getElementById('viewMode');
   viewChange.addEventListener('click', changeDirection, false);
 
-  var isVertical = false,
+  var isVertical = false;
   direction = 'horizontal';
   mySwiper = initSwiper(direction);
 
   function loadSlide() {
-    console.log(isVertical, direction)
-    mySwiper.appendSlide(arrStr); // slide items add
+    mySwiper.appendSlide(arrStr); // add slide items
+    arrStr = [];
   }
  
   function initSwiper(direction) {
     return new Swiper('.swiper-container', {
+      direction: direction,
       lazy: true,
       speed: 600,
-      direction: direction
+      observer: true,
     });
   }
 
