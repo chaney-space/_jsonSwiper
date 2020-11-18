@@ -14,7 +14,7 @@ body {
 
 .swiper-container {
   width: 400px;
-  height: 600px;
+  height: calc(100vh - 100px);  /* 위아래 fixed 영역 제외 */
 }
 .swiper-slide {
   /* padding: 20px 0; */
